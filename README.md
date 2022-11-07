@@ -1,6 +1,25 @@
-# Vue 3 + TypeScript + Vite
+## 実装機能
+* ハッシュタグ
+  * ハッシュタグ一覧
+  * ハッシュタグ編集（一括機能）
+  * ハッシュタグ-ジャンル紐付け
+  * 関連ハッシュタグの抽出（csv DL）
 
-This template should help get you started developing with Vue 3 and TypeScript in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
+* ジャンル
+  * ジャンル一覧（id, 名前, 投稿数, 編集、削除）
+  * ジャンル登録
+  * ジャンル編集
+  * ジャンル-ハッシュタグ紐付け
+
+* 会社
+  * 会社登録
+  * アカウント（ブランド登録）
+
+* 各種アカウント
+  * スクレイピングアカウント
+  * APIアカウント
+  
+
 
 ## Recommended IDE Setup
 
