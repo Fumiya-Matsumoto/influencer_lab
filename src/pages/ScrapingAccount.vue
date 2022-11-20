@@ -48,7 +48,7 @@
 <script lang="ts">
 import { defineComponent,onMounted,ref } from 'vue';
 import axios from 'axios';
-import orderBy from 'lodash/orderBy';
+import _ from 'lodash';
 
 type ScrapingAccount = {
     id: string;
@@ -67,7 +67,7 @@ export default defineComponent({
         async function getScrapingAccounts() {
             await axios
                 .get('http://localhost:5000/scraping_accounts')
-                .then(response => scraping_accounts.value = orderBy(response.data, 'is_deleted'))
+                .then(response => scraping_accounts.value = _.orderBy(response.data, 'is_deleted'))
         }
 
         async function updateOperationStatus(scraping_account: ScrapingAccount) {
