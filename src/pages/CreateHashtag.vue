@@ -44,7 +44,7 @@ export default defineComponent({
     // methods
     async function createHashtag() {
       await axios
-        .post('https://influencer-lab-backend.herokuapp.com/hashtags', {
+        .post('https://influencer-lab-backend.herokuapp.com/instagram_hashtags', {
           name: hashtag_name.value,
           media_count: media_count.value
         })

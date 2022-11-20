@@ -75,7 +75,6 @@ export default defineComponent({
                 .put('http://localhost:5000/scraping_accounts/' + scraping_account.id, {
                     username: scraping_account.username,
                     password: scraping_account.password,
-                    igsid: scraping_account.igsid,
                     is_deleted: !scraping_account.is_deleted,
                 })
                 .then(res => {
