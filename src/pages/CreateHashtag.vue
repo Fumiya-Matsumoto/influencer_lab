@@ -64,7 +64,7 @@
           <div class="mt-5">
             <v-btn
               small
-              color="success"
+              color="succ;ess"
               class="mr-4"
               :loading="loading"
               @click="submit"
@@ -138,13 +138,13 @@ export default defineComponent({
     // methods
     async function getHashtags() {
       await axios
-        .get('http://localhost:5000/instagram_hashtags')
+        .get('https://influencer-lab-backend.herokuapp.com/instagram_hashtags')
         .then(response => dbRegisterdHashtagList.value = response.data.map((hashtag: Hashtag) => hashtag.name))
     };
 
     async function getGenres() {
       await axios
-        .get('http://localhost:5000/instagram_genres')
+        .get('https://influencer-lab-backend.herokuapp.com/instagram_genres')
         .then(
           response => genreList.value = response.data.filter(function(genre: Genre){
             return genre.user_id === '875b3c9e-cb54-4398-97e6-e5010610b960'
