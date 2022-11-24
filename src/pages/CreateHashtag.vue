@@ -64,7 +64,7 @@
           <div class="mt-5">
             <v-btn
               small
-              color="succ;ess"
+              color="success"
               class="mr-4"
               :loading="loading"
               @click="submit"
