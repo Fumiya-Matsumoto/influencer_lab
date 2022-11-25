@@ -66,13 +66,13 @@ export default defineComponent({
         // methods
         async function getScrapingAccounts() {
             await axios
-                .get('http://localhost:5000/scraping_accounts')
+                .get('https://influencer-lab-backend.herokuapp.com/scraping_accounts')
                 .then(response => scraping_accounts.value = _.orderBy(response.data, 'is_deleted'))
         }
 
         async function updateOperationStatus(scraping_account: ScrapingAccount) {
             await axios
-                .put('http://localhost:5000/scraping_accounts/' + scraping_account.id, {
+                .put('https://influencer-lab-backend.herokuapp.com/scraping_accounts/' + scraping_account.id, {
                     username: scraping_account.username,
                     password: scraping_account.password,
                     is_deleted: !scraping_account.is_deleted,
