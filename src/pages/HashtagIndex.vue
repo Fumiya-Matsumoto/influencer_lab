@@ -308,7 +308,7 @@ export default defineComponent({
 
         const getUsers = async () => {
             await axios
-                .get('http://influencer-lab-backend.herokuapp.com/users')
+                .get('https://influencer-lab-backend.herokuapp.com/users')
                 .then(response => {
                     users.value = response.data
                 })
