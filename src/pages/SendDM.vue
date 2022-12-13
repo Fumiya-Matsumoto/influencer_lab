@@ -1,5 +1,57 @@
 <template>
-    <div>
+    <v-container fluid>
+        <base-title>
+            DM自動送信
+            <template #subtext>InstagramのDM自動送信を行います。</template>
+        </base-title>
+
+        <v-row class="pt-3">
+            <v-col>
+                <v-select
+                    label="DMを送信するアカウントを選んでください"
+                    v-model="sender"
+                    :items="send_dm_params"
+                    item-title="name"
+                    item-value="name"
+                ></v-select>
+            </v-col>
+        </v-row>
+
+        <v-row>
+            <v-col>
+                <v-select
+                    label="送信するメッセージを選んでください"
+                    v-model="message"
+                    :items="messages"
+                ></v-select>
+            </v-col>
+        </v-row>
+
+        <v-row>
+            <v-col>
+                <v-text-field
+                    label="送信数"
+                    v-model="max_count"
+                    type="number"
+                    suffix="件"
+                >
+                </v-text-field>
+            </v-col>
+        </v-row>
+
+        <div>
+            <p>DM受信アカウント</p>
+            <v-list>
+                <v-list-item
+                    v-for="receiver in receivers"
+                    :key="receiver"
+                    :title="receiver"
+                ></v-list-item>
+            </v-list>
+        </div>
+
+    </v-container>
+    <!-- <div>
         <p class="bg-blue-200 text-2xl p-4">DM自動送信</p>
         <div class="px-4 pt-4">
           <p v-show="error_flag">サーバーとの通信にエラーが発生しています。</p>
@@ -30,13 +82,16 @@
             <li v-for="(receiver, idx) in receivers" :key="idx">{{ receiver }}</li>
           </ul>
         </div>
-    </div>
+    </div> -->
 </template>
 
 
 <script lang="ts">
 import { defineComponent, onMounted, ref, watch } from "vue";
 import axios from "axios";
+
+import BaseTitle from '../components/BaseTitle.vue';
+
 
 interface SendDMParam {
     name: string
@@ -45,6 +100,9 @@ interface SendDMParam {
 }
 
 export default defineComponent({
+    components: {
+        BaseTitle
+    },
     setup() {
         // data
         const sender = ref<string>();

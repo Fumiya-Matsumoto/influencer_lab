@@ -1,6 +1,9 @@
 <template>
-    <div>
-        <p class="bg-blue-200 text-2xl p-4">スクレイピングアカウント</p>
+    <v-container fluid>
+        <base-title>
+            スクレイピングアカウント稼働状況
+            <template #subtext>Instagramer抽出に使うスクレイピング用アカウントの稼働状況を確認・変更するページです。</template>
+        </base-title>
         <div>
             <v-table>
                 <thead>
@@ -41,7 +44,7 @@
                 </tbody>
             </v-table>
         </div>  
-    </div>
+    </v-container>
   </template>
 
 
@@ -49,6 +52,9 @@
 import { defineComponent,onMounted,ref } from 'vue';
 import axios from 'axios';
 import _ from 'lodash';
+
+import BaseTitle from '../components/BaseTitle.vue';
+
 
 type ScrapingAccount = {
     id: string;
@@ -59,6 +65,9 @@ type ScrapingAccount = {
 }
 
 export default defineComponent({
+    components: {
+        BaseTitle
+    },
     setup() {
         // data
         const scraping_accounts = ref<ScrapingAccount[]>([]);
