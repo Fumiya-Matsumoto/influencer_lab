@@ -1,5 +1,4 @@
 <template>
-    <facebook-login-form></facebook-login-form>
 </template>
 
 <script lang="ts">

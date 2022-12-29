@@ -13,7 +13,9 @@
 		"lib": ["ESNext", "DOM"],
 		"skipLibCheck": true,
 		"types": ["node"],
+		"baseUrl": ".",
 		"paths": {
+			"@": ["src"],
 			"@/*": [
 				"./src/*"
 			],

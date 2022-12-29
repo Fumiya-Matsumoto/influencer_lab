@@ -1,57 +1,38 @@
 <template>
 	<v-app :theme="theme">
-		<v-card>
-			<v-layout>
-				<v-app-bar>
-					<template v-slot:prepend>
-						<v-app-bar-nav-icon @click.stop="drawer = !drawer">
-						</v-app-bar-nav-icon>
-					</template>
+		<!-- ヘッダー -->
+		<header-component></header-component>
 
-					<v-app-bar-title>InfluencerLab</v-app-bar-title>
+		<!-- ナビゲーションバー -->
+		<navigation-drawer></navigation-drawer>
 
-					<v-spacer></v-spacer>
-
-					<v-btn :prepend-icon="theme === 'light' ? 'mdi-weather-sunny' : 'mdi-weather-night'"
-						@click="onClick"></v-btn>
-				</v-app-bar>
-
-				<v-navigation-drawer v-model="drawer" disable-resize-watcher>
-					<v-list density="compact" nav>
-						<v-list-item-group v-model="group" active-class="deep-purple--text text--accent-4">
-							<v-list-item v-for="(nav_list, idx) in nav_lists" :key="idx" :to="nav_list.link">
-								<template v-slot:prepend>
-									<v-icon :icon="nav_list.icon"></v-icon>
-								</template>
-
-								<v-list-item-content>
-									<v-list-item-title v-text="nav_list.name"></v-list-item-title>
-								</v-list-item-content>
-							</v-list-item>
-						</v-list-item-group>
-					</v-list>
-				</v-navigation-drawer>
-
-				<v-main>
-					<v-container fluid style="min-height: 100vh;">
-						<router-view></router-view>
-					</v-container>
-				</v-main>
-
-			</v-layout>
-		</v-card>
+		<v-main>
+			<v-container fluid>
+				<router-view></router-view>
+			</v-container>
+		</v-main>
 	</v-app>
 </template>
 
 <script lang="ts">
 import { defineComponent, ref, watch } from 'vue';
+import HeaderComponent from './components/Header.vue';
+import NavigationDrawer from './components/NavigationDrawer.vue';
+import { useRouter } from 'vue-router';
+import { store } from './store/store';
+
 
 export default defineComponent({
-
+	components: {
+		HeaderComponent,
+		NavigationDrawer
+	},
 	setup() {
-		const theme = ref('light')
-		const drawer = ref(false)
-		const group = ref(null)
+		const theme = ref('light');
+		const drawer = ref(false);
+		const group = ref(null);
+		const menu = ref<boolean>(false);
+		const router = useRouter();
 
 		const nav_lists = [
 			{
@@ -90,6 +71,14 @@ export default defineComponent({
 			theme.value = theme.value === 'light' ? 'dark' : 'light'
 		}
 
+		const onLogin = () => {
+			router.push('/login')
+		}
+
+		const selectFacebookPage = () => {
+			console.log('OK')
+		}
+
 		watch(group, () => {
 			drawer.value = false
 		})
@@ -98,8 +87,12 @@ export default defineComponent({
 			theme,
 			drawer,
 			group,
+			menu,
 			nav_lists,
 			onClick,
+			onLogin,
+			selectFacebookPage,
+			store,
 		}
 	}
 })

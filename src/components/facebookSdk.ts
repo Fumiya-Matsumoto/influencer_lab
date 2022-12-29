@@ -39,7 +39,8 @@ export class FacebookSdk {
       appId: string,
       autoLogAppEvents = true,
       xfbml = true,
-      version = "v8.0"
+      status = true,
+      version = "v15.0"
     ): Promise<Facebook> {
       // SDKダウンロード（ダウンロード済みなら何もしないでおわり）
       this.load();
@@ -47,10 +48,11 @@ export class FacebookSdk {
       return new Promise<Facebook>((resolve, reject) => {
         try {
           window.FB.init({
-            appId,
-            autoLogAppEvents,
-            xfbml,
-            version
+            appId: appId,
+            autoLogAppEvents: autoLogAppEvents,
+            xfbml: xfbml,
+            status: status,
+            version: version
           });
   
           resolve(window.FB);

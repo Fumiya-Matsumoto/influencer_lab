@@ -2,6 +2,7 @@ interface FacebookInitParameter {
     appId: string;
     autoLogAppEvents: boolean;
     xfbml: boolean;
+    status: boolean;
     version: string; // https://developers.facebook.com/docs/graph-api/changelog
 }
   
