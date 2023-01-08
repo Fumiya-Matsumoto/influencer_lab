@@ -1,9 +1,34 @@
 <template>
-    <v-container>
+    <v-container fluid>
         <base-title>
             Instagramリード一覧
             <template #subtext>DBに保存されているInstagramリードの一覧を表示しています。</template>
         </base-title>
+
+        <h2 class="text-body-1 font-weight-bold my-5">
+            検索キーワード
+        </h2>
+        <v-row>
+            <v-col>
+                <v-text-field
+                    label="キーワード"
+                    v-model="q"
+                    density="compact"
+                    hide-details="auto"
+                ></v-text-field>
+            </v-col>
+            <v-col>
+                <v-btn
+                    small
+					color="success"
+					class="mr-4"
+					:loading="search_loading"
+					@click="search"
+                >
+                検索
+                </v-btn>
+            </v-col>
+        </v-row>
 
         <v-table
             hover
@@ -90,7 +115,6 @@
 
 <script lang="ts">
 import { defineComponent, ref, onMounted, watchEffect } from "vue";
-import { store } from '../store/store';
 import axios from "axios";
 
 import BaseTitle from "../components/BaseTitle.vue";
@@ -114,7 +138,7 @@ type Instagramer = {
 type InstagramLead = {
     id: string;
     instagramer_id: string;
-    user_id: string;
+    service_id: string;
     status_id: string;
     dm_is_sent: boolean;
     dm_is_replied: boolean;
@@ -128,7 +152,10 @@ export default defineComponent({
     },
     setup() {
         const instagram_leads = ref<InstagramLead[]>([]);
-        const user_id = ref('5dbca154-51a4-45f6-a63a-152dd3c1f6a7')
+        const service_id = ref('5dbca154-51a4-45f6-a63a-152dd3c1f6a7')
+
+        // query
+        const q = ref<string>('');
 
         // page_info
         const lead_total_num = ref<number>(0);
@@ -142,10 +169,12 @@ export default defineComponent({
 
         const isSelectAll = ref<boolean>(false);
         const selected_instagram_leads = ref<InstagramLead[]>([]);
+
+        const search_loading = ref<boolean>(false);
         
 
         // methods
-        const getInstagramLeads = async (page_num: number, page_size: number, user_id: string) => {
+        const getInstagramLeads = async (page_num: number, page_size: number, service_id: string, q?: string) => {
             await axios
             .get(
                 'https://influencer-lab-backend.herokuapp.com/instagram_leads',
@@ -153,7 +182,8 @@ export default defineComponent({
                     params: {
                         page_num: page_num,
                         page_size: page_size,
-                        user_id: user_id
+                        service_id: service_id,
+                        q: q,
                     }
                 }
             )
@@ -166,7 +196,12 @@ export default defineComponent({
         }
 
         const pagination = () => {
-            getInstagramLeads(page.value, page_size.value, user_id.value)
+            getInstagramLeads(page.value, page_size.value, service_id.value, q.value)
+        }
+
+        const search = () => {
+            page.value = 1
+            getInstagramLeads(page.value, page_size.value, service_id.value, q.value);
         }
 
         const selectAllInstagramLeads = () => {
@@ -186,7 +221,7 @@ export default defineComponent({
                         conversion: instagram_lead.conversion
                     })
                     .then((res) => {
-                        // getInstagramLeads(page.value, page_size.value, user_id.value)
+                        // getInstagramLeads(page.value, page_size.value, service_id.value)
                         console.log('OK');
                     })
                     .catch((err) => {
@@ -203,7 +238,7 @@ export default defineComponent({
                         conversion: !instagram_lead.conversion
                     })
                     .then((res) => {
-                        // getInstagramLeads(page.value, page_size.value, user_id.value)
+                        // getInstagramLeads(page.value, page_size.value, service_id.value)
                         console.log('OK');
                     })
                     .catch((err) => {
@@ -213,7 +248,7 @@ export default defineComponent({
 
         // mouont
         onMounted(() => {
-            getInstagramLeads(page.value, page_size.value, user_id.value);
+            getInstagramLeads(page.value, page_size.value, service_id.value);
             page_length.value = Math.trunc( lead_total_num.value / page_size.value ) + 1;
         })
 
@@ -228,11 +263,14 @@ export default defineComponent({
             selected_instagram_leads,
             isSelectAll,
             page,
+            q,
             page_length,
+            search_loading,
             selectAllInstagramLeads,
             pagination,
             updateDMIsSent,
             updateConversation,
+            search,
         }
     }
 })

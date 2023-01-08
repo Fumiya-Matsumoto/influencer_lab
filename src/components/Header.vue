@@ -21,9 +21,9 @@
         >
             ログアウト
         </v-btn>
-        <v-btn @click="onGetLoginStatus">
+        <!-- <v-btn @click="onGetLoginStatus">
             ログインステータス
-        </v-btn>
+        </v-btn> -->
 
         <v-menu
             v-if="store.state.isLogin"
@@ -36,16 +36,22 @@
                     icon
                     v-bind="props"
                 >
-                    <v-icon>mdi-dots-vertical</v-icon>
+                    <!-- <v-icon>mdi-dots-vertical</v-icon> -->
+                    <v-avatar class="mr-2">
+                        <v-img
+                            :src="store.state.facebookPage.picture.data.url"
+                            :alt="store.state.facebookPage.name"
+                        ></v-img>
+                    </v-avatar>
                 </v-btn>
             </template>
 
             <v-card min-width="300">
                 <v-list>
                     <v-list-item
-                        :prepend-avatar="store.state.facebookUserInfo.picture?.data.url"
-                        :title="store.state.facebookUserInfo.name"
-                        :subtitle="store.state.facebookUserInfo.email"
+                        :prepend-avatar="store.state.facebookPage.picture.data.url"
+                        :title="store.state.facebookPage.name"
+                        :subtitle="store.state.facebookPage.category"
                     >
                     </v-list-item>
                 </v-list>
@@ -60,7 +66,7 @@
                         :title="facebookPage.name"
                         :subtitle="facebookPage.category"
                         height="60"
-                        @click="selectFacebookPage"
+                        @click="selectFacebookPage(facebookPage)"
                     >
                     </v-list-item>
                 </v-list>
@@ -76,6 +82,31 @@ import { FacebookSdk } from "./facebookSdk";
 import { useRouter } from 'vue-router';
 import { store } from '../store/store';
 import * as ActionTypes from "../store/actionTypes";
+
+
+type Category = {
+    id: string;
+    name: string;
+}
+
+type Picture = {
+    data: {
+        height: number;
+        width: number;
+        is_silhouette: boolean;
+        url: string;
+    }
+}
+
+type FacebookPage = {
+    id: string;
+    access_token: string;
+    name: string;
+    category: string;
+    category_list: Category[];
+    link: string;
+    picture: Picture;
+}
 
 
 export default defineComponent({
@@ -187,6 +218,7 @@ export default defineComponent({
 				facebookPage.value = json.data[0];
 
 				store.dispatch(ActionTypes.FacebookPages, facebookPages.value);
+                store.dispatch(ActionTypes.FacebookPage, facebookPage.value);
 			}
 
 			console.log({
@@ -202,8 +234,8 @@ export default defineComponent({
 			facebookSdk.getLoginStatus();
 		};
 
-		const selectFacebookPage = () => {
-			console.log('OK')
+		const selectFacebookPage = (facebookPage: FacebookPage) => {
+			store.dispatch(ActionTypes.FacebookPage, facebookPage)
 		}
 
         return {

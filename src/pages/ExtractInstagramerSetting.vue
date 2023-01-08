@@ -25,9 +25,9 @@
                 <v-col>
                     <v-select
                         label="ユーザー"
-                        v-model="selected_user_id"
-                        :items="all_users"
-                        item-title="username"
+                        v-model="selected_service_id"
+                        :items="all_services"
+                        item-title="name"
                         item-value="id"
                         required
                     ></v-select>
@@ -70,15 +70,14 @@ import BaseTitle from '../components/BaseTitle.vue'
 interface Genre {
 	id: string
 	name: string
-	user_id: string
+	service_id: string
 }
 
 
-interface User {
+interface Service {
     id: string,
     company_id: string,
     name: string,
-    username: string
 }
 
 
@@ -89,8 +88,8 @@ export default defineComponent({
     setup() {
         const genres = ref<Genre[]>();
         const selected_genre_name = ref<string>('');
-        const all_users = ref<User[]>();
-        const selected_user_id = ref<string>('');
+        const all_services = ref<Service[]>();
+        const selected_service_id = ref<string>('');
         const valid = ref<boolean>(true);
         const form = ref();
         const loading = ref<boolean>(false);
@@ -102,18 +101,18 @@ export default defineComponent({
             await axios
                 .get('https://influencer-lab-backend.herokuapp.com/extract_instagramer/setting')
                 .then(response => {
-                    selected_user_id.value = response.data.user.id;
-                    all_users.value = response.data.all_users;
+                    selected_service_id.value = response.data.service.id;
+                    all_services.value = response.data.all_services;
                     selected_genre_name.value = response.data.genre.name;
                     genres.value = response.data.all_genres;
                 })
         }
 
-        async function updateInstagramerSetting(user_id: string, genre_name: string) {
+        async function updateInstagramerSetting(service_id: string, genre_name: string) {
             loading.value = true;
             await axios
                 .post('https://influencer-lab-backend.herokuapp.com/extract_instagramer/setting', {
-                    user_id: user_id,
+                    service_id: service_id,
                     genre_name: genre_name
                 })
                 .then((res) => {
@@ -135,15 +134,15 @@ export default defineComponent({
                 alert_flg.value = 'error';
                 return;
             } else {
-                updateInstagramerSetting(selected_user_id.value, selected_genre_name.value);
+                updateInstagramerSetting(selected_service_id.value, selected_genre_name.value);
                 alert_flg.value = 'success';
             }
         }
 
         // computed
         const genre_names = computed(() => {
-            if (selected_user_id && genres.value) {
-                return Array.from(new Set(genres.value.filter((genre) => genre.user_id == selected_user_id.value)))
+            if (selected_service_id && genres.value) {
+                return Array.from(new Set(genres.value.filter((genre) => genre.service_id == selected_service_id.value)))
             }
         })
 
@@ -155,8 +154,8 @@ export default defineComponent({
             genres,
             genre_names,
             selected_genre_name,
-            all_users,
-            selected_user_id,
+            all_services,
+            selected_service_id,
             valid,
             form,
             loading,

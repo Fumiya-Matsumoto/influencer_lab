@@ -14,9 +14,9 @@
                 </h2>
                 <v-select
                     label="ユーザー"
-                    v-model="selected_user_id"
-                    :items="users"
-                    item-title="username"
+                    v-model="selected_service_id"
+                    :items="services"
+                    item-title="name"
                     item-value="id"
                     density="compact"
                     hide-details="auto"
@@ -73,7 +73,7 @@
                 <v-select
                     label="ジャンル"
                     v-model="selected_instagram_genre"
-                    :items="instagram_genres.filter((obj) => obj.user_id == selected_user_id)"
+                    :items="instagram_genres.filter((obj) => obj.service_id == selected_service_id)"
                     item-title="name"
                     item-value="value"
                     return-object
@@ -135,7 +135,7 @@
                     <td>
                         <v-chip-group>
                             <v-chip
-                                v-for="genre in instagram_hashtag.instagram_genres.filter((obj) => obj.user_id == selected_user_id)"
+                                v-for="genre in instagram_hashtag.instagram_genres.filter((obj) => obj.service_id == selected_service_id)"
                                 :key="genre.id"
                             >
                                 {{ genre.name }}
@@ -158,7 +158,7 @@
                     <div class="px-4">
                         <v-combobox
                             v-model="selected_instagram_genres"
-                            :items="instagram_genres.filter((obj) => obj.user_id == selected_user_id)"
+                            :items="instagram_genres.filter((obj) => obj.service_id == selected_service_id)"
                             item-title="name"
                             chips
                             clearable
@@ -223,7 +223,7 @@ import BaseTitle from '../components/BaseTitle.vue';
 type InstagramGenre = {
     id: string;
     name: string;
-    user_id: string
+    service_id: string
 }
 
 
@@ -235,11 +235,10 @@ type InstagramHashtag = {
 }
 
 
-type User = {
+type Service = {
     id: string;
     company_id: string;
     name: string;
-    username: string;
 }
 
 
@@ -261,8 +260,8 @@ export default defineComponent({
         const previous_url = ref<string|null>();
         const next_url = ref<string|null>();
 
-        const users = ref<User[]>([]);
-        const selected_user_id = ref<string>('875b3c9e-cb54-4398-97e6-e5010610b960');
+        const services = ref<Service[]>([]);
+        const selected_service_id = ref<string>('875b3c9e-cb54-4398-97e6-e5010610b960');
         const selected_instagram_hashtag = ref<InstagramHashtag>();
         const selected_instagram_hashtags = ref<InstagramHashtag[]>([]);
         const selected_instagram_genre = ref<InstagramGenre>();
@@ -306,11 +305,11 @@ export default defineComponent({
                 })
         }
 
-        const getUsers = async () => {
+        const getServices = async () => {
             await axios
-                .get('https://influencer-lab-backend.herokuapp.com/users')
+                .get('https://influencer-lab-backend.herokuapp.com/services')
                 .then(response => {
-                    users.value = response.data
+                    services.value = response.data
                 })
         }
 
@@ -331,8 +330,8 @@ export default defineComponent({
         const openModal = (instagram_hashtag: InstagramHashtag) => {
             dialog.value = true
             selected_instagram_hashtag.value = instagram_hashtag
-            selected_instagram_genres.value = instagram_hashtag.instagram_genres.filter((obj) => obj.user_id == selected_user_id.value)
-            not_selected_instagram_genres.value = instagram_hashtag.instagram_genres.filter((obj) => obj.user_id != selected_user_id.value)
+            selected_instagram_genres.value = instagram_hashtag.instagram_genres.filter((obj) => obj.service_id == selected_service_id.value)
+            not_selected_instagram_genres.value = instagram_hashtag.instagram_genres.filter((obj) => obj.service_id != selected_service_id.value)
         }
 
         async function updateGenres() {
@@ -400,7 +399,7 @@ export default defineComponent({
         // mouont
         onMounted(() => {
             getHashtags(page.value, page_size.value);
-            getUsers();
+            getServices();
             getGenres();
             page_length.value = Math.trunc( hashtag_total_num.value / page_size.value ) + 1;
         })
@@ -422,8 +421,8 @@ export default defineComponent({
             hashtag_total_num,
             previous_url,
             next_url,
-            users,
-            selected_user_id,
+            services,
+            selected_service_id,
             selected_instagram_hashtag,
             selected_instagram_hashtags,
             selected_instagram_genre,

@@ -105,7 +105,7 @@ interface HashtagInput {
 interface Genre {
 	id: string
 	name: string
-	user_id: string
+	service_id: string
 }
 
 interface Hashtag {
@@ -147,7 +147,7 @@ export default defineComponent({
 				.get('https://influencer-lab-backend.herokuapp.com/instagram_genres')
 				.then(
 					response => genreList.value = response.data.filter(function(genre: Genre){
-						return genre.user_id === '875b3c9e-cb54-4398-97e6-e5010610b960'
+						return genre.service_id === '875b3c9e-cb54-4398-97e6-e5010610b960'
 					}) 
 				)
 		};

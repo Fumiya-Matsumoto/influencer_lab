@@ -42,6 +42,7 @@ type State = {
     rail: boolean;
     userId: string;
     facebookUserInfo: FacebookUserInfo;
+    facebookPage: FacebookPage;
     facebookPages: FacebookPage[];
 };
 
@@ -61,6 +62,22 @@ export const store = createStore<State>({
             name: '',
             email: '',
         },
+        facebookPage: {
+            id: '',
+            access_token: '',
+            name: '',
+            category: '',
+            category_list: [],
+            link: '',
+            picture: {
+                data: {
+                    height: 0,
+                    width: 0,
+                    is_silhouette: false,
+                    url: ''
+                }
+            }
+        },
         facebookPages: [],
     },
     mutations: {
@@ -70,6 +87,9 @@ export const store = createStore<State>({
         },
         [MutationTypes.RAIL] (state, rail: boolean) {
             state.rail = rail
+        },
+        [MutationTypes.FacebookPage] (state, facebookPage: FacebookPage) {
+            state.facebookPage = facebookPage;
         },
         [MutationTypes.FacebookPages] (state, facebookPages: []) {
             state.facebookPages = facebookPages;
@@ -85,6 +105,9 @@ export const store = createStore<State>({
         },
         [ActionTypes.RAIL]({ commit }, rail: boolean) {
             commit(MutationTypes.RAIL, rail);
+        },
+        [ActionTypes.FacebookPage] ({ commit }, facebookPage: FacebookPage) {
+            commit(MutationTypes.FacebookPage, facebookPage);
         },
         [ActionTypes.FacebookPages] ({ commit }, facebookPages: []) {
             commit(MutationTypes.FacebookPages, facebookPages);
